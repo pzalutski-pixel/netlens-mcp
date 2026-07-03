@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "netlens-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "Zero-dependency MCP server for unobstructed web reading: direct browser-header fetch past robots.txt/bot blocks, full-page HTML->Markdown with ad/boilerplate stripping, plus web search"
 readme = "README.md"
 requires-python = ">=3.10"

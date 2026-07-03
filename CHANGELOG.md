@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-07-03
+
+### Changed
+- `web_search` now returns the full first page of results (~10) by default instead
+  of capping at 8, so a result at position 9/10 is no longer silently dropped.
+  `limit` stays available as an optional cap (bounded by `SAFETY_MAX_RESULTS`).
+  Documented that a search fetches a single page — the HTML endpoints don't paginate
+  reliably via GET, so refine the query rather than expecting deep pagination.
+
 ## [0.1.1] - 2026-07-03
 
 ### Fixed

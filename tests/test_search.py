@@ -117,3 +117,35 @@ def test_searxng_parses_json(monkeypatch):
 def test_engine_error_status_yields_no_results(monkeypatch):
     monkeypatch.setattr(search.fetcher, "fetch", lambda url, **k: {"status": 503, "html": "nope"})
     assert search._run_engine("duckduckgo", "q", 8) == []
+
+
+def _capture_cap(monkeypatch):
+    captured = {}
+
+    def fake(name, query, limit):
+        captured["cap"] = limit
+        return [{"title": "t", "url": "u", "snippet": ""}]
+
+    monkeypatch.setattr(search, "_run_engine", fake)
+    monkeypatch.delenv("NETLENS_SEARCH_ENGINE", raising=False)
+    monkeypatch.delenv("NETLENS_SEARXNG_URL", raising=False)
+    return captured
+
+
+def test_default_returns_full_page_not_arbitrary_8(monkeypatch):
+    captured = _capture_cap(monkeypatch)
+    search.search("q")  # no limit
+    # default must return the whole first page, never the old arbitrary 8
+    assert captured["cap"] == search.SAFETY_MAX_RESULTS >= 10
+
+
+def test_explicit_limit_is_capped_to_safety_max(monkeypatch):
+    captured = _capture_cap(monkeypatch)
+    search.search("q", limit=1000)
+    assert captured["cap"] == search.SAFETY_MAX_RESULTS
+
+
+def test_explicit_small_limit_is_respected(monkeypatch):
+    captured = _capture_cap(monkeypatch)
+    search.search("q", limit=3)
+    assert captured["cap"] == 3

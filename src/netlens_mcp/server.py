@@ -70,14 +70,19 @@ TOOLS = [
             "Search the web and return real result links (title, URL, snippet), "
             "parsed locally from a search engine's HTML endpoint via a direct, "
             "bot-bypassing fetch. Returns LINKS, not summaries — follow up with "
-            "web_fetch to read a result's full content. WORKFLOW: web_search to find "
-            "pages, then web_fetch to read them."
+            "web_fetch to read a result's full content. Returns the full first page "
+            "of results (~10); a search fetches one page, so refine the query rather "
+            "than expecting deep pagination. WORKFLOW: web_search to find pages, then "
+            "web_fetch to read them."
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "query": {"type": "string", "description": "The search query"},
-                "limit": {"type": "integer", "description": "Max results (default 8)"},
+                "limit": {
+                    "type": "integer",
+                    "description": "Optional cap on results; default returns the full first page (~10)",
+                },
                 "engine": {
                     "type": "string",
                     "enum": ["auto", "duckduckgo", "bing", "mojeek", "searxng"],
@@ -146,7 +151,8 @@ async def handle_tool_call(name: str, arguments: dict) -> dict:
     try:
         if name == "web_search":
             query = arguments["query"]
-            limit = int(arguments.get("limit", 8))
+            limit = arguments.get("limit")
+            limit = int(limit) if limit else None
             engine = arguments.get("engine")
             results = await loop.run_in_executor(None, lambda: search.search(query, limit, engine))
             if not results:

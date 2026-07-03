@@ -35,6 +35,13 @@ MOJEEK_HTML = "https://www.mojeek.com/search"
 # every result in a base64 redirect that's more fragile to decode.
 DEFAULT_ORDER = ("duckduckgo", "mojeek", "bing")
 
+# A single fetch returns one result page (~10 results). By default we return the
+# whole page rather than an arbitrary slice, so a result at position 9/10 isn't
+# silently dropped; SAFETY_MAX bounds a pathologically long page. There is no deep
+# pagination — the HTML endpoints don't page reliably via GET (DDG/Bing repeat
+# page 1), so beyond the first page the right move is to refine the query.
+SAFETY_MAX_RESULTS = 25
+
 
 def _strip_tags(s: str) -> str:
     return unescape(re.sub(r"<[^>]+>", "", s)).strip()
@@ -180,14 +187,17 @@ def _resolve_order(engine: str | None) -> tuple[str, ...]:
     return DEFAULT_ORDER
 
 
-def search(query: str, limit: int = 8, engine: str | None = None) -> list[dict]:
+def search(query: str, limit: int | None = None, engine: str | None = None) -> list[dict]:
     """Search the web and return [{title, url, snippet}].
 
+    By default returns the full first page of results (~10) so nothing is dropped
+    by an arbitrary cap; `limit` optionally trims that (capped at SAFETY_MAX_RESULTS).
     `engine` selects the backend (default: auto-fallback chain). Falls through to
     the next engine when one errors or yields no results.
     """
+    cap = min(limit, SAFETY_MAX_RESULTS) if (limit and limit > 0) else SAFETY_MAX_RESULTS
     for name in _resolve_order(engine):
-        results = _run_engine(name, query, limit)
+        results = _run_engine(name, query, cap)
         if results:
             return results
     return []

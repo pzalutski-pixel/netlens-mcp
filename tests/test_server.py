@@ -95,5 +95,6 @@ async def test_web_search_passes_engine_through(monkeypatch):
     monkeypatch.setattr(server.search, "search", fake_search)
     r = await server.handle_request({"jsonrpc": "2.0", "id": 9, "method": "tools/call",
                                      "params": {"name": "web_search", "arguments": {"query": "hi", "engine": "bing"}}})
-    assert captured == {"query": "hi", "limit": 8, "engine": "bing"}
+    # no limit given -> None (search() decides the full-page default), engine passed through
+    assert captured == {"query": "hi", "limit": None, "engine": "bing"}
     assert r["result"]["isError"] is False
