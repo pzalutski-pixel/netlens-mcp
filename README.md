@@ -68,8 +68,12 @@ Search the web and return real result links (title, URL, snippet), parsed locall
 | Argument | Type | Description |
 |---|---|---|
 | `query` | string (required) | The search query |
-| `limit` | integer | Max results (default 8) |
+| `limit` | integer | Optional cap; default returns the full first page (~10) |
 | `engine` | string | `auto` (default), `duckduckgo`, `bing`, `mojeek`, `searxng` |
+
+A search fetches a **single result page** (~10 results), returned in full by default so
+nothing at position 9/10 is dropped. There's no deep pagination — if the answer isn't in
+the first page, refine the query.
 
 ### `web_fetch`
 
