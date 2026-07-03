@@ -151,3 +151,6 @@ ruff check .            # lint
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+<!-- mcp-name: io.github.pzalutski-pixel/netlens -->
+

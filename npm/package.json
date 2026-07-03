@@ -1,7 +1,7 @@
 {
   "name": "netlens-mcp",
   "mcpName": "io.github.pzalutski-pixel/netlens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zero-dependency MCP server for unobstructed web reading: browser-header fetch past robots.txt/bot blocks, full-page HTML->Markdown with ad stripping, plus web search",
   "license": "Apache-2.0",
   "author": "Peter Zalutski",
