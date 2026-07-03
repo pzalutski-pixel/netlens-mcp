@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.pytest_cache/
+.ruff_cache/
+node_modules/
+.venv/
+*.whl
+
+# npm launcher: server/ is populated from src/ at publish time
+npm/server/
+
+# Claude Code local settings
+.claude/
+
+# Local MCP configuration
+.mcp.json

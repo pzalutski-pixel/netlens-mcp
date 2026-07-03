@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "netlens-mcp"
+version = "0.1.0"
+description = "Zero-dependency MCP server for unobstructed web reading: direct browser-header fetch past robots.txt/bot blocks, full-page HTML->Markdown with ad/boilerplate stripping, plus web search"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name = "Peter Zalutski"}]
+keywords = ["mcp", "mcp-server", "web", "fetch", "reader", "scraping", "markdown", "research", "web-search", "ai-agents", "claude", "model-context-protocol"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Text Processing :: Markup :: HTML",
+]
+dependencies = []
+
+[project.scripts]
+netlens-mcp = "netlens_mcp.server:main_sync"
+
+[project.urls]
+Homepage = "https://github.com/pzalutski-pixel/netlens-mcp"
+Repository = "https://github.com/pzalutski-pixel/netlens-mcp"
+Issues = "https://github.com/pzalutski-pixel/netlens-mcp/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.7.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
