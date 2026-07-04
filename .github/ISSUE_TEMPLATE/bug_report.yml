@@ -1,0 +1,83 @@
+name: Bug
+description: Something behaves incorrectly. Fill this so the defect can be reproduced.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The goal is a defect we can reproduce. For a web reader, the single most valuable thing is the exact URL (or a minimal HTML snippet) that triggers it.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence — what's wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact, ordered, deterministic steps.
+      placeholder: |
+        1. Call web_fetch with url "https://example.com/page" (mode "article").
+        2. Observe the returned Markdown / HTTP status.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: input
+    id: repro-url
+    attributes:
+      label: URL or minimal reproducible example
+      description: A public URL (or a small HTML snippet) that triggers the issue. The single highest-value field.
+      placeholder: "https://example.com/page-that-breaks"
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: The conditions needed to reproduce.
+      placeholder: |
+        NetLens version:
+        Install method (uvx netlens-mcp / npx netlens-mcp / from source):
+        OS + exact version + arch (e.g. Windows 11 23H2 x64):
+        Python version (`python --version`):
+        curl available? (`curl --version`, or urllib fallback):
+        MCP client + launch config (command + args):
+        For web_search issues: which engine (auto/duckduckgo/bing/mojeek/searxng):
+    validations:
+      required: true
+
+  - type: textarea
+    id: tool-io
+    attributes:
+      label: Tool request and response
+      description: The exact MCP tool call and the response you received (trim long page content).
+      render: json
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Logs (stderr), related issues, anything else.
+    validations:
+      required: false

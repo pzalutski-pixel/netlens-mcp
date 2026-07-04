@@ -1,0 +1,101 @@
+name: Feature
+description: A capability or change to build. Fill this so it can be picked up and worked without further context.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the change so someone (or an agent) can implement it cold.
+        Be concrete about where it lives and how to confirm it's done.
+        Do not include scheduling, priority, or effort — those are decided when work is picked up, not here.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence — what the change is.
+      placeholder: "Add a `mode=text` to web_fetch that returns plain text with links stripped."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Problem / motivation
+      description: The need this addresses, stated independently of the solution. Why it matters; what's limited today.
+      placeholder: |
+        On link-dense pages the Markdown carries hundreds of inline links that pollute
+        the agent's context even after ad-stripping. There's no way to ask for just the
+        readable prose.
+    validations:
+      required: true
+
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed approach
+      description: The technical direction. Enough that an implementer doesn't have to invent the design.
+      placeholder: |
+        Add a "text" branch in convert.page_to_markdown that emits link text without the
+        (url) target, reusing the existing _MarkdownConverter; expose mode="text" on the
+        web_fetch tool schema in server.py.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Where this lives (code pointers)
+      description: Concrete files / functions involved, and existing components to reuse or preserve. This is what makes the issue pickable.
+      placeholder: |
+        Tool defs + dispatch: src/netlens_mcp/server.py (TOOLS, handle_tool_call).
+        Fetch (curl/urllib, headers, charset): src/netlens_mcp/fetcher.py.
+        HTML -> Markdown + ad/boilerplate stripping: src/netlens_mcp/convert.py.
+        Search engine registry: src/netlens_mcp/search.py (ENGINES, _parse_*).
+        Reuse: convert._MarkdownConverter, convert._find_main_region, fetcher.fetch.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: A checklist that defines "done". Each item objectively checkable.
+      placeholder: |
+        - [ ] web_fetch accepts mode="text" and returns prose with no Markdown links.
+        - [ ] Ad/boilerplate stripping and article isolation still apply.
+        - [ ] Existing article/full/raw modes are unchanged.
+        - [ ] Tool result stays a valid MCP text content block.
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification
+    attributes:
+      label: How to verify
+      description: Where the tests are and the exact command to run them.
+      placeholder: |
+        Tests: tests/ (pytest; stdlib fixtures + monkeypatched fetcher, no network).
+        Run: python -m pytest
+        Lint: ruff check .
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope boundaries / dependencies
+      description: What is explicitly out of scope, and anything this is gated on.
+      placeholder: |
+        Out: JS rendering / headless browser; solving Cloudflare/CAPTCHA (out of scope by design).
+        Gated: nothing — stays pure standard library.
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Anything else — related issues/discussions, prior art, constraints to respect (keep it zero-dependency).
+    validations:
+      required: false
